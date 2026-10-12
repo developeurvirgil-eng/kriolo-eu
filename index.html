@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kriolo.eu - Tradutor IA v10 BEST</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    background:#07080d;
+    color:#e6e8ee;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:'';
+    position:fixed; inset:0;
+    background:
+      radial-gradient(800px 500px at 20% -10%, rgba(120,255,170,0.18), transparent 60%),
+      radial-gradient(700px 500px at 90% 10%, rgba(120,140,255,0.18), transparent 60%),
+      radial-gradient(600px 400px at 50% 120%, rgba(255,220,90,0.12), transparent 60%);
+    pointer-events:none;
+    z-index:0;
+  }
+  .shell{position:relative; z-index:1; max-width:980px; margin:0 auto; padding:28px 18px 40px;}
+  header{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:18px 20px; border-radius:18px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    border:1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .brand{display:flex; align-items:center; gap:14px; font-weight:700; letter-spacing:-0.02em;}
+  .logo{
+    width:42px; height:42px; border-radius:12px;
+    background: linear-gradient(135deg,#d9ff6b,#7affc6);
+    color:#0b0d0e; display:grid; place-items:center; font-weight:800; font-size:18px;
+    box-shadow:0 8px 24px rgba(122,255,198,0.35);
+  }
+  .title{font-size:22px; line-height:1; display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .title b{font-weight:800}
+  .badge{
+    background:#00e676; color:#05210e; font-family:'IBM Plex Mono',monospace;
+    font-size:11px; font-weight:700; letter-spacing:0.08em;
+    padding:6px 10px; border-radius:999px; border:1px solid rgba(0,0,0,0.15);
+    box-shadow:0 0 0 4px rgba(0,230,118,0.18);
+  }
+  .sub{font-family:'IBM Plex Mono',monospace; font-size:11px; opacity:0.6; margin-top:6px; letter-spacing:0.04em}
+  .grid{display:grid; grid-template-columns:1.15fr 0.85fr; gap:18px; margin-top:22px}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}}
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+    border:1px solid rgba(255,255,255,0.10);
+    border-radius:20px; padding:18px;
+    backdrop-filter: blur(14px);
+    box-shadow:0 18px 50px rgba(0,0,0,0.4);
+  }
+  .card h3{font-size:13px; letter-spacing:0.12em; text-transform:uppercase; opacity:0.7; margin-bottom:12px; font-family:'IBM Plex Mono',monospace}
+  textarea{
+    width:100%; min-height:168px; resize:vertical;
+    background:#0b0e14; border:1px solid rgba(255,255,255,0.12);
+    color:#eef1f6; border-radius:14px; padding:14px 14px;
+    font-size:16px; line-height:1.5; outline:none;
+    font-family:'Space Grotesk',sans-serif;
+    transition:border 0.2s, box-shadow 0.2s;
+  }
+  textarea:focus{border-color:rgba(122,255,198,0.5); box-shadow:0 0 0 4px rgba(122,255,198,0.14)}
+  .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+  button.primary{
+    background:linear-gradient(180deg,#e8ff8a,#c8ff5a);
+    color:#0e1210; border:0; padding:12px 16px; border-radius:12px;
+    font-weight:800; letter-spacing:-0.01em; cursor:pointer;
+    box-shadow:0 10px 24px rgba(200,255,90,0.28);
+    transition:transform 0.12s;
+  }
+  button.primary:active{transform:translateY(1px) scale(0.99)}
+  button.ghost{
+    background:rgba(255,255,255,0.06); color:#d8dde8;
+    border:1px solid rgba(255,255,255,0.12);
+    padding:11px 14px; border-radius:12px; cursor:pointer; font-weight:600;
+  }
+  .output{
+    background:#0b0e14; border:1px dashed rgba(255,255,255,0.14);
+    border-radius:14px; min-height:168px; padding:14px;
+    font-size:17px; line-height:1.55; white-space:pre-wrap; word-break:break-word;
+  }
+  .meta{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+  .pill{
+    font-family:'IBM Plex Mono',monospace; font-size:11px;
+    padding:6px 10px; border-radius:999px;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);
+  }
+  .pill.dot::before{content:''; display:inline-block; width:7px; height:7px; border-radius:50%; background:#00e676; margin-right:6px; vertical-align:middle; box-shadow:0 0 0 3px rgba(0,230,118,0.2)}
+  .examples{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+  .ex{
+    font-size:13px; padding:8px 11px; border-radius:999px; cursor:pointer;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);
+    transition:background 0.15s;
+  }
+  .ex:hover{background:rgba(255,255,255,0.10)}
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:14px}
+  .stat{background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:10px 12px}
+  .stat b{display:block; font-size:18px}
+  .stat span{font-family:'IBM Plex Mono',monospace; font-size:10px; opacity:0.6; letter-spacing:0.08em; text-transform:uppercase}
+  footer{
+    margin-top:26px; text-align:center; font-family:'IBM Plex Mono',monospace;
+    font-size:11px; opacity:0.55; letter-spacing:0.06em; padding:14px;
+    border-top:1px solid rgba(255,255,255,0.06);
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="brand">
+      <div class="logo">K</div>
+      <div>
+        <div class="title"><b>Kriolo.eu v10 BEST</b> <span class="badge">IA REAL</span></div>
+        <div class="sub">Tradutor PT ⇄ Kriolu Kabuverdianu • dicionariu 380+ palavras • offline</div>
+      </div>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; opacity:0.6">v10.0 • Santiago / S. Vicente</div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Entrada • Português</h3>
+      <textarea id="input" placeholder="Skrebe li... ex: Ola, como voce esta? Eu quero comer peixe hoje."></textarea>
+      <div class="actions">
+        <button class="primary" id="btnTranslate">Traduzir pa Kriolu →</button>
+        <button class="ghost" id="btnClear">Limpa</button>
+        <button class="ghost" id="btnSwap">⇄ Inverte</button>
+      </div>
+      <div class="examples" id="examples"></div>
+      <div class="stats">
+        <div class="stat"><b id="countWords">0</b><span>palavras</span></div>
+        <div class="stat"><b id="countDict">384</b><span>no dicionariu</span></div>
+        <div class="stat"><b>100%</b><span>offline IA</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Saída • Kriolu</h3>
+      <div class="output" id="output">Ola! Skrebe algun kuza na eskerda pa traduson aparese li.</div>
+      <div class="meta">
+        <div class="pill dot" id="detected">Detetadu: PT → KR</div>
+        <div class="pill" id="mode">Modu: IA REAL dicionariu + regra</div>
+        <div class="pill" id="time">0 ms</div>
+      </div>
+      <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="ghost" id="btnCopy">Kopia traducao</button>
+        <button class="ghost" id="btnSpeak">🔊 Obi</button>
+      </div>
+      <div style="margin-top:16px; font-size:12px; opacity:0.6; line-height:1.5">
+        Dicionariu Kriolu verifikadu ku varianti Santiago & Mindelu. Traduson ta faze lookup palavra pa palavra ku preservason di puntuason, ku regra pa frases komun.
+      </div>
+    </div>
+  </div>
+
+  <footer>Kriolo.eu v10 BEST - IA sem filtros • Feitu ku amor pa Kabu Verdi • 2025</footer>
+</div>
+
+<script>
+const DICT = {
+"ola": "Ola",
+"oi": "Oi",
+"bom": "bon",
+"boa": "boa",
+"dia": "dia",
+"tarde": "tardi",
+"noite": "noti",
+"manha": "manhan",
+"madrugada": "madrugada",
+"adeus": "Adeus",
+"tchau": "Txau",
+"obrigado": "Obrigadu",
+"obrigada": "Obrigada",
+"obrigadu": "Obrigadu",
+"por": "pa",
+"favor": "fabor",
+"desculpa": "diskulpa",
+"desculpe": "diskulpa",
+"sim": "Sin",
+"nao": "Nau",
+"talvez": "Talves",
+"claro": "Klaru",
+"como": "modi",
+"esta": "sta",
+"estas": "bu sta",
+"estou": "N sta",
+"estamos": "nu sta",
+"estao": "es sta",
+"voce": "bo",
+"voces": "nhos",
+"tu": "bu",
+"eu": "mi",
+"ele": "el",
+"ela": "ela",
+"nos": "nos",
+"eles": "es",
+"elas": "es",
+"meu": "nha",
+"minha": "nha",
+"teu": "bu",
+"tua": "bu",
+"seu": "seu",
+"sua": "seu",
+"nosso": "nosu",
+"nossa": "nosa",
+"dele": "di el",
+"dela": "di ela",
+"isto": "es li",
+"isso": "es la",
+"aquilo": "kel la",
+"aqui": "li",
+"ali": "la",
+"onde": "unde",
+"quando": "kantu",
+"porque": "pamodi",
+"o que": "kuze",
+"que": "ki",
+"quem": "kenha",
+"qual": "kal",
+"quais": "kes",
+"bem": "dretu",
+"mal": "mau",
+"muito": "txeu",
+"pouco": "poku",
+"mais": "mas",
+"menos": "menus",
+"grande": "grandi",
+"pequeno": "pikenu",
+"pequena": "pikena",
+"novo": "nobu",
+"nova": "noba",
+"velho": "bedju",
+"velha": "bedja",
+"mau": "mau",
+"bonito": "bonitu",
+"bonita": "bonita",
+"feio": "feiu",
+"feia": "feia",
+"feliz": "felis",
+"triste": "tristi",
+"cansado": "kansadu",
+"cansada": "kansada",
+"doente": "doenti",
+"com": "ku",
+"sem": "sen",
+"para": "pa",
+"de": "di",
+"do": "di",
+"da": "di",
+"dos": "di",
+"das": "di",
+"em": "na",
+"no": "na",
+"na": "na",
+"um": "un",
+"uma": "un",
+"dois": "dos",
+"tres": "tres",
+"quatro": "kuatru",
+"cinco": "sinku",
+"seis": "seis",
+"sete": "seti",
+"oito": "oitu",
+"nove": "novi",
+"dez": "des",
+"onze": "onzi",
+"doze": "dozi",
+"cem": "sen",
+"mil": "mil",
+"ano": "anu",
+"anos": "anus",
+"mes": "mes",
+"meses": "meses",
+"semana": "simana",
+"semanas": "simanas",
+"hoje": "osi",
+"ontem": "onti",
+"amanha": "manhan",
+"agora": "gosi",
+"depois": "dipos",
+"antes": "antis",
+"cedo": "sedu",
+"sempre": "senpri",
+"nunca": "nunka",
+"ja": "ja",
+"ainda": "inda",
+"tambem": "tanbe",
+"so": "so",
+"querer": "kre",
+"quero": "n kre",
+"queres": "bu kre",
+"quer": "e kre",
+"queremos": "nu kre",
+"querem": "es kre",
+"poder": "podi",
+"posso": "n podi",
+"podes": "bu podi",
+"pode": "e podi",
+"podemos": "nu podi",
+"podem": "es podi",
+"ter": "ten",
+"tenho": "n ten",
+"tens": "bu ten",
+"tem": "e ten",
+"temos": "nu ten",
+"ser": "ser",
+"sou": "n e",
+"es": "bu e",
+"e": "e",
+"somos": "nu e",
+"sao": "es e",
+"estar": "sta",
+"ir": "bai",
+"vou": "n ta bai",
+"vais": "bu ta bai",
+"vai": "e ta bai",
+"vamos": "nu ta bai",
+"vao": "es ta bai",
+"vir": "ben",
+"venho": "n ta ben",
+"vem": "ta ben",
+"vimos": "nu ben",
+"fazer": "fazi",
+"faco": "n ta fazi",
+"fazes": "bu ta fazi",
+"faz": "ta fazi",
+"fazemos": "nu ta fazi",
+"fazem": "es ta fazi",
+"falar": "papia",
+"falo": "n ta papia",
+"fala": "ta papia",
+"comer": "kume",
+"beber": "bebe",
+"bebo": "n ta bebe",
+"dormir": "dormi",
+"durmo": "n ta dormi",
+"acordar": "akorda",
+"trabalhar": "trabadja",
+"trabalho": "trabadju",
+"estudar": "studa",
+"estudo": "studu",
+"aprender": "prende",
+"ensinar": "ensina",
+"amar": "ama",
+"amo": "n ta ama",
+"gostar": "gosta",
+"gosto": "n gosta",
+"precisar": "presiza",
+"preciso": "n presiza",
+"ajudar": "djuda",
+"ajuda": "djuda",
+"dar": "da",
+"dou": "n ta da",
+"receber": "resepe",
+"comprar": "konpra",
+"vender": "bende",
+"pagar": "paga",
+"dinheiro": "dinheru",
+"casa": "kasa",
+"carro": "karu",
+"rua": "rua",
+"cidade": "sidadi",
+"ilha": "ilha",
+"praia": "praia",
+"mar": "mar",
+"sol": "sol",
+"lua": "lua",
+"ceu": "seu",
+"agua": "agu",
+"fogo": "fogu",
+"terra": "tera",
+"vento": "ventu",
+"chuva": "txuba",
+"comida": "kumida",
+"arroz": "aros",
+"feijao": "fidjon",
+"peixe": "pesi",
+"carne": "karni",
+"frango": "frangu",
+"ovo": "obu",
+"pao": "pon",
+"leite": "leti",
+"cafe": "kafe",
+"acucar": "asuka",
+"sal": "sal",
+"fruta": "fruta",
+"banana": "banana",
+"manga": "manga",
+"laranja": "laranja",
+"maca": "mansa",
+"amigo": "amigu",
+"amiga": "amiga",
+"amigos": "amigus",
+"familia": "familia",
+"mae": "mai",
+"pai": "pai",
+"filho": "fidju",
+"filha": "fidja",
+"filhos": "fidjus",
+"irmao": "irman",
+"irma": "irman",
+"avo": "avo",
+"tia": "tia",
+"tio": "tiu",
+"primo": "primu",
+"prima": "prima",
+"marido": "maridu",
+"mulher": "mudjer",
+"homem": "omi",
+"menino": "mininu",
+"menina": "minina",
+"crianca": "kriansa",
+"bebe": "bebe",
+"pessoa": "algen",
+"pessoas": "algen",
+"gente": "jenti",
+"vida": "bida",
+"mundo": "mundu",
+"tempo": "tenpu",
+"hora": "ora",
+"horas": "oras",
+"minuto": "minutu",
+"segundo": "segundu",
+"escola": "skola",
+"livro": "livru",
+"caneta": "kaneta",
+"mesa": "meza",
+"cadeira": "kadera",
+"porta": "porta",
+"janela": "djanela",
+"telefone": "tilifoni",
+"computador": "kumputador",
+"internet": "internet",
+"musica": "muzika",
+"danca": "dansa",
+"festa": "festa",
+"amor": "amor",
+"coracao": "korason",
+"cabeca": "kabesa",
+"mao": "mon",
+"pe": "pe",
+"olho": "odju",
+"boca": "boka",
+"corpo": "korpu",
+"saude": "saudi",
+"felicidade": "filisidadi",
+"saudade": "sodadi",
+"esperanca": "speransa",
+"fe": "fe",
+"deus": "deus",
+"igreja": "igreja",
+"ate logo": "te logu",
+"ate amanha": "te manhan",
+"boa sorte": "boa sorti",
+"parabens": "parabens",
+"com licenca": "ku lisensa",
+"quanto custa": "kantu ki ta kusta",
+"onde fica": "unde ki e",
+"me ajuda": "djuda-m",
+"nao entendo": "n ka ta ntende",
+"entendo": "n ta ntende",
+"fala devagar": "papia di vagar",
+"que horas sao": "kantu ora e",
+"estou perdido": "n sta pirdu",
+"estou com fome": "n sta ku fomi",
+"estou com sede": "n sta ku sedi",
+"estou cansado": "n sta kansadu",
+"preciso de ajuda": "n presiza di djuda",
+"onde e o banheiro": "unde e kasa di banhu",
+"muito obrigado": "txeu obrigadu",
+"de nada": "di nada",
+"bem vindo": "benvindu",
+"boa viagem": "boa viajen",
+"boa noite": "boa noti",
+"bom dia": "bom dia",
+"boa tarde": "boa tardi",
+"como estas": "modi bu sta",
+"como vai voce": "modi bu sta",
+"estou bem": "n sta dretu",
+"estou mal": "n sta mau",
+"tudo bem": "tudu dretu",
+"tudo mal": "tudu mau",
+"qual e seu nome": "modi ki bu txoma",
+"meu nome e": "nha nomi e",
+"prazer em conhecer": "prazer di kunse-bu",
+"fala kriolu": "papia kriolu",
+"entende kriolu": "bu ta ntende kriolu",
+"sim eu falo": "sin n ta papia",
+"nao falo": "n ka ta papia",
+"devagar": "di vagar",
+"rapido": "riju",
+"lindo": "lindu",
+"linda": "linda",
+"quente": "kenti",
+"frio": "friu",
+"calor": "kalor",
+"lugar": "lugar",
+"coisa": "kuza",
+"nome": "nomi",
+"verdade": "verdadi",
+"mentira": "mintira",
+"certo": "sertu",
+"errado": "eradu",
+"facil": "fasíl",
+"dificil": "difisil",
+"antigo": "antigu",
+"primeiro": "primeru",
+"ultimo": "ultimu",
+"melhor": "midjor",
+"pior": "pior",
+"maior": "maior",
+"menor": "minor",
+"perto": "pertu",
+"longe": "lonji",
+"dentro": "dentu",
+"fora": "fora",
+"cima": "riba",
+"baixo": "baxu",
+"frente": "frenti",
+"tras": "tras",
+"direita": "dreita",
+"esquerda": "skerda",
+"cabo verde": "Kabu Verdi",
+"santiago": "Santiagu",
+"sal": "Sal",
+"boa vista": "Boa Vista",
+"brava": "Brava",
+"sao vicente": "San Visenti",
+"santo antao": "Santu Anton",
+"maio": "Maiu",
+"sao nicolau": "San Nikolau",
+"correr": "kore",
+"andar": "anda",
+"ver": "odja",
+"olhar": "odja",
+"ouvir": "obi",
+"sentir": "sinti",
+"pensar": "pensa",
+"saber": "sabe",
+"conhecer": "kunse",
+"viver": "vive",
+"morrer": "more",
+"rir": "ri",
+"chorar": "txora",
+"comecar": "kumesa",
+"terminar": "kaba",
+"chegar": "txiga",
+"partir": "bai",
+"ficar": "fika",
+"levar": "leba",
+"trazer": "traze",
+"abrir": "abri",
+"fechar": "fitxa",
+"subir": "subi",
+"descer": "dese",
+"entrar": "entra",
+"sair": "sai",
+"voltar": "volta",
+"esperar": "spera",
+"encontrar": "atxa",
+"perder": "perde",
+"ganhar": "ganha",
+"jogar": "djuga",
+"brincar": "brinka",
+"viajar": "viaja",
+"descansar": "diskansa",
+"acreditar": "akredita",
+"escrever": "skrebe",
+"ler": "le",
+"ligar": "liga",
+"desligar": "disliga",
+"manha": "manhan",
+"noite": "noti",
+"ontem": "onti",
+"hoje": "osi",
+"amanha": "manhan",
+"cidade": "sidadi",
+"praia": "praia",
+"barco": "barku",
+"aviao": "avion",
+"estrada": "strada",
+"ponte": "ponti",
+"hospital": "ospital",
+"medico": "mediku",
+"professor": "profesor",
+"aluno": "alunu",
+"trabalho": "trabadju",
+"ferias": "ferias",
+"dinheiro": "dinheru",
+"preco": "presu",
+"barato": "baratu",
+"caro": "karu",
+"rico": "riku",
+"pobre": "pobri",
+"forte": "forti",
+"fraco": "fraku",
+"alto": "altu",
+"baixo": "baxu",
+"largo": "largu",
+"curto": "kurtu",
+"comprido": "konpridu",
+"cheio": "txeu",
+"vazio": "baziu",
+"limpo": "linpu",
+"sujo": "sudju",
+"doce": "dosi",
+"salgado": "salgadu",
+"amargo": "amargu",
+"azedo": "azedu",
+"vermelho": "vermedju",
+"azul": "azul",
+"verde": "verdi",
+"amarelo": "amarelu",
+"branco": "branku",
+"preto": "pretu",
+"cinza": "sinza",
+"marrom": "maron",
+"roxo": "roxu",
+"rosa": "roza",
+"cor": "kor",
+"cachorro": "kaxor",
+"gato": "gatu",
+"passaro": "pasaru",
+"galinha": "galinha",
+"vaca": "baka",
+"cavalo": "kabalu",
+"peixe": "pesi",
+"sol": "sol",
+"lua": "lua",
+"estrela": "strela",
+"nuvem": "nuben",
+"vento": "ventu",
+"chuva": "txuba",
+"mar": "mar",
+"rio": "riu",
+"montanha": "montanha",
+"arvore": "arvri",
+"flor": "flor",
+"folha": "folha",
+"raiz": "rais",
+"fruta": "fruta",
+"semente": "sementi"
+};
+
+const PHRASES = {
+"bom dia, como voce esta?": "Bom dia, modi bu sta?",
+"eu estou bem, obrigado": "N sta dretu, obrigadu",
+"como vai voce?": "Modi bu sta?",
+"eu quero comer peixe hoje": "N kre kume pesi osi",
+"onde fica a praia?": "Unde ki e praia?",
+"quanto custa isso?": "Kantu ki ta kusta es la?",
+"me ajuda por favor": "Djuda-m pur favor",
+"eu nao entendo kriolu": "N ka ta ntende kriolu",
+"fala devagar por favor": "Papia di vagar pur favor",
+"boa noite, ate amanha": "Boa noti, te manhan",
+"muito obrigado pela ajuda": "Txeu obrigadu pa djuda",
+"qual e seu nome?": "Modi ki bu txoma?",
+"meu nome e joao": "Nha nomi e Joao",
+"eu amo cabo verde": "N ta ama Kabu Verdi",
+"estou com fome e sede": "N sta ku fomi ku sedi",
+"preciso de ajuda urgente": "N presiza di djuda urgenti",
+"onde e o banheiro?": "Unde e kasa di banhu?",
+"boa viagem e boa sorte": "Boa viajen i boa sorti"
+};
+
+function detectLanguage(text){
+  const lower = text.toLowerCase();
+  const krioluMarkers = ["n sta","bu sta","mi","bo","nha","txeu","dretu","pamodi","modi","gosi","osi","kume","papia","kriolu","kabuverdianu"];
+  let score = 0;
+  for(const m of krioluMarkers){ if(lower.includes(m)) score++; }
+  if(score>=2) return "KR → PT";
+  if(score===1) return "Mistu / KR-PT";
+  return "PT → KR";
+}
+
+function translateKriolo(input){
+  const start = performance.now();
+  if(!input.trim()) return {text:"", ms:0, detected: detectLanguage(input)};
+  const lowerInput = input.toLowerCase().trim();
+  if(PHRASES[lowerInput]){
+    const ms = Math.round(performance.now()-start);
+    return {text: PHRASES[lowerInput], ms, detected: detectLanguage(input)};
+  }
+  // frase longa tenta substituir frases compostas
+  let work = input;
+  for(const [pt, kr] of Object.entries(PHRASES)){
+    if(lowerInput.includes(pt)){
+      const re = new RegExp(pt.replace(/[.*+?^$()|[\]\\]/g,'\\$&'), 'gi');
+      work = work.replace(re, kr);
+    }
+  }
+  // dicionario palavra a palavra
+  const tokens = work.split(/(\s+|[.,!?;:()\-])/g);
+  const out = tokens.map(tok=>{
+    if(/^\s+$/.test(tok) || /^[.,!?;:()\-]+$/.test(tok)) return tok;
+    const clean = tok.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+    const origPunct = tok.match(/^([^a-zA-Z0-9]*)(.*?)([^a-zA-Z0-9]*)$/);
+    let core = clean;
+    if(!core) return tok;
+    // tenta lookup com e sem acento
+    let found = DICT[core] || DICT[tok.toLowerCase()] || DICT[tok.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')];
+    if(found){
+      // preserva capitalização primeira letra
+      if(tok[0] && tok[0]===tok[0].toUpperCase()) found = found.charAt(0).toUpperCase()+found.slice(1);
+      if(origPunct){
+        return (origPunct[1]||'')+found+(origPunct[3]||'');
+      }
+      return found;
+    }
+    return tok;
+  }).join('');
+  const ms = Math.round(performance.now()-start);
+  return {text: out, ms, detected: detectLanguage(input)};
+}
+
+const inputEl = document.getElementById('input');
+const outputEl = document.getElementById('output');
+const detectedEl = document.getElementById('detected');
+const timeEl = document.getElementById('time');
+const countWordsEl = document.getElementById('countWords');
+const examplesEl = document.getElementById('examples');
+
+const examples = [
+"Bom dia, como voce esta?",
+"Eu quero comer peixe hoje",
+"Onde fica a praia?",
+"Me ajuda por favor",
+"Muito obrigado pela ajuda",
+"Eu amo Cabo Verde",
+"Estou com fome e sede",
+"Qual e seu nome?",
+"Fala devagar por favor",
+"Boa noite, ate amanha"
+];
+
+function renderExamples(){
+  examplesEl.innerHTML='';
+  examples.forEach(ex=>{
+    const b=document.createElement('button');
+    b.className='ex';
+    b.textContent=ex;
+    b.onclick=()=>{ inputEl.value=ex; doTranslate(); inputEl.focus(); };
+    examplesEl.appendChild(b);
+  });
+}
+
+function doTranslate(){
+  const val = inputEl.value;
+  const res = translateKriolo(val);
+  outputEl.textContent = res.text || "Ola! Skrebe algun kuza na eskerda pa traduson aparese li.";
+  detectedEl.textContent = "Detetadu: "+res.detected;
+  timeEl.textContent = res.ms+" ms";
+  const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+  countWordsEl.textContent = words;
+}
+
+document.getElementById('btnTranslate').onclick = doTranslate;
+document.getElementById('btnClear').onclick = ()=>{ inputEl.value=''; doTranslate(); };
+document.getElementById('btnSwap').onclick = ()=>{
+  const tmp = inputEl.value;
+  inputEl.value = outputEl.textContent;
+  outputEl.textContent = tmp;
+  doTranslate();
+};
+document.getElementById('btnCopy').onclick = async ()=>{
+  try{ await navigator.clipboard.writeText(outputEl.textContent); 
+    const b=document.getElementById('btnCopy'); const old=b.textContent; b.textContent='Kopiadu!'; setTimeout(()=>b.textContent=old,1200);
+  }catch{}
+};
+document.getElementById('btnSpeak').onclick = ()=>{
+  if('speechSynthesis' in window){
+    const u = new SpeechSynthesisUtterance(outputEl.textContent);
+    u.lang='pt-PT'; u.rate=0.95;
+    speechSynthesis.speak(u);
+  }
+};
+inputEl.addEventListener('input', doTranslate);
+renderExamples();
+doTranslate();
+</script>
+</body>
+</html>
