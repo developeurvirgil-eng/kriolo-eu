@@ -12,12 +12,12 @@
     background:#07080d;
     color:#e6e8ee;
     min-height:100vh;
-    position:relative;
+    pôxition:relative;
     overflow-x:hidden;
   }
   body::before{
     content:'';
-    position:fixed; inset:0;
+    pôxition:fixed; inset:0;
     background:
       radial-gradient(800px 500px at 20% -10%, rgba(120,255,170,0.18), transparent 60%),
       radial-gradient(700px 500px at 90% 10%, rgba(120,140,255,0.18), transparent 60%),
@@ -25,7 +25,7 @@
     pointer-events:none;
     z-index:0;
   }
-  .shell{position:relative; z-index:1; max-width:980px; margin:0 auto; padding:28px 18px 40px;}
+  .shell{pôxition:relative; z-index:1; max-width:980px; margin:0 auto; padding:28px 18px 40px;}
   header{
     display:flex; align-items:center; justify-content:space-between; gap:16px;
     padding:18px 20px; border-radius:18px;
@@ -281,10 +281,10 @@ const DICT = {
 "meses": "meses",
 "semana": "simana",
 "semanas": "simanas",
-"hoje": "osi",
+"hoje": "ôxi",
 "ontem": "onti",
 "amanha": "manhan",
-"agora": "gosi",
+"agora": "gôxi",
 "depois": "dipos",
 "antes": "antis",
 "cedo": "sedu",
@@ -382,7 +382,7 @@ const DICT = {
 "comida": "kumida",
 "arroz": "aros",
 "feijao": "fidjon",
-"peixe": "pesi",
+"peixe": "pexi",
 "carne": "karni",
 "frango": "frangu",
 "ovo": "obu",
@@ -580,7 +580,7 @@ const DICT = {
 "manha": "manhan",
 "noite": "noti",
 "ontem": "onti",
-"hoje": "osi",
+"hoje": "ôxi",
 "amanha": "manhan",
 "cidade": "sidadi",
 "praia": "praia",
@@ -611,7 +611,7 @@ const DICT = {
 "vazio": "baziu",
 "limpo": "linpu",
 "sujo": "sudju",
-"doce": "dosi",
+"doce": "dôxi",
 "salgado": "salgadu",
 "amargo": "amargu",
 "azedo": "azedu",
@@ -632,7 +632,7 @@ const DICT = {
 "galinha": "galinha",
 "vaca": "baka",
 "cavalo": "kabalu",
-"peixe": "pesi",
+"peixe": "pexi",
 "sol": "sol",
 "lua": "lua",
 "estrela": "strela",
@@ -654,7 +654,7 @@ const PHRASES = {
 "bom dia, como voce esta?": "Bom dia, modi bu sta?",
 "eu estou bem, obrigado": "N sta dretu, obrigadu",
 "como vai voce?": "Modi bu sta?",
-"eu quero comer peixe hoje": "N kre kume pesi osi",
+"eu quero comer peixe hoje": "N kre kume pexi ôxi",
 "onde fica a praia?": "Unde ki e praia?",
 "quanto custa isso?": "Kantu ki ta kusta es la?",
 "me ajuda por favor": "Djuda-m pur favor",
@@ -673,7 +673,7 @@ const PHRASES = {
 
 function detectLanguage(text){
   const lower = text.toLowerCase();
-  const krioluMarkers = ["n sta","bu sta","mi","bo","nha","txeu","dretu","pamodi","modi","gosi","osi","kume","papia","kriolu","kabuverdianu"];
+  const krioluMarkers = ["n sta","bu sta","mi","bo","nha","txeu","dretu","pamodi","modi","gôxi","ôxi","kume","papia","kriolu","kabuverdianu"];
   let score = 0;
   for(const m of krioluMarkers){ if(lower.includes(m)) score++; }
   if(score>=2) return "KR → PT";
